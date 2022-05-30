@@ -10,6 +10,7 @@ namespace WebApplication1.Entidades
         [StringLength(100, ErrorMessage = "Maxima cantidad de caracteres {0}")]
         [PrimeraLetraMayuscula]
         public string Nombre { get; set; }
-       
+        public List<AutorLibro> AutoresLibros { get; set; }
+
     }
 }
