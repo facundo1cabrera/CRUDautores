@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -9,6 +11,7 @@ namespace WebApplication1.Controllers
 {
     [ApiController]
     [Route("api/autores")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
     public class AutoresController: ControllerBase
     {
         private readonly ApplicationDbContext context;
@@ -21,6 +24,7 @@ namespace WebApplication1.Controllers
         }
 
        [HttpGet]
+       [AllowAnonymous]
        public async Task<ActionResult<List<AutorDTO>>> Get()
         {
             var autores = await context.Autores.ToListAsync();
@@ -103,7 +107,7 @@ namespace WebApplication1.Controllers
 
             context.Remove(new Autor() { Id = id });
             await context.SaveChangesAsync();
-            return Ok();
+            return NoContent();
         }
     }
 }

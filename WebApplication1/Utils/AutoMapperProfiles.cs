@@ -23,6 +23,8 @@ namespace WebApplication1.Utils
             CreateMap<Libro, LibroConAutoresDTO>()
                 .ForMember(libro => libro.Autores, opciones => opciones.MapFrom(MapLibroDTOAutores));
 
+            CreateMap<LibroPatchDTO, Libro>().ReverseMap();
+
             CreateMap<ComentarioCreacionDTO, Comentario>();
             CreateMap<Comentario, ComentarioDTO>();
         }

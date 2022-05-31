@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.DTOs;
@@ -91,6 +92,43 @@ namespace WebApplication1.Controllers
                     libro.AutoresLibros[i].Orden = i;
                 }
             }
+        }
+
+        [HttpPatch("{id:int}")]
+        public async Task<ActionResult> Patch(int id, JsonPatchDocument<LibroPatchDTO> patchDocument)
+        {
+            if (patchDocument == null) { return BadRequest(); }
+
+            var libroDB = await context.Libros.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (libroDB == null) { return NotFound(); }
+
+            var libroDTO = mapper.Map<LibroPatchDTO>(libroDB);
+
+            patchDocument.ApplyTo(libroDTO, ModelState);
+
+            var esValido = TryValidateModel(libroDTO);
+
+            if(!esValido) { return BadRequest(ModelState); }
+
+            mapper.Map(libroDTO, libroDB);
+
+            await context.SaveChangesAsync();
+            return NoContent();
+        }
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var exist = await context.Autores.AnyAsync(autor => autor.Id == id);
+
+            if (!exist)
+            {
+                return NotFound();
+            }
+
+            context.Remove(new Autor() { Id = id });
+            await context.SaveChangesAsync();
+            return NoContent();
         }
     }
 }
