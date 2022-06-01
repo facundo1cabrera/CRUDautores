@@ -38,7 +38,7 @@ namespace WebApplication1.Controllers
             return mapper.Map<LibroConAutoresDTO>(libro);
         }
 
-        [HttpPost]
+        [HttpPost(Name = "crearLibro")]
         public async Task<ActionResult> Post(LibroCreacionDTO libroCreacionDTO)
         {
 
@@ -68,7 +68,7 @@ namespace WebApplication1.Controllers
             return CreatedAtRoute("obtenerLibro", new { id = libroDTO.Id}, libroDTO);
         }
 
-        [HttpPut("{id:int}")]
+        [HttpPut("{id:int}", Name = "actualizarLibro")]
         public async Task<ActionResult> Put(int id, LibroCreacionDTO libroCreacionDTO)
         {
             var libroDB = await context.Libros.Include(libroDb => libroDb.AutoresLibros).FirstOrDefaultAsync(x => x.Id == id);
@@ -94,7 +94,7 @@ namespace WebApplication1.Controllers
             }
         }
 
-        [HttpPatch("{id:int}")]
+        [HttpPatch("{id:int}", Name = "patchLibro")]
         public async Task<ActionResult> Patch(int id, JsonPatchDocument<LibroPatchDTO> patchDocument)
         {
             if (patchDocument == null) { return BadRequest(); }
@@ -116,7 +116,7 @@ namespace WebApplication1.Controllers
             await context.SaveChangesAsync();
             return NoContent();
         }
-        [HttpDelete("{id:int}")]
+        [HttpDelete("{id:int}", Name = "borrarLibro")]
         public async Task<ActionResult> Delete(int id)
         {
             var exist = await context.Autores.AnyAsync(autor => autor.Id == id);

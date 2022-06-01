@@ -31,7 +31,7 @@ namespace WebApplication1.Controllers
             dataProtector = dataProtectionProvider.CreateProtector("Juan");
         }
 
-        [HttpGet("RenovarToken")]
+        [HttpGet("RenovarToken", Name = "renovarToken")]
         [Authorize( AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<RespuestaAutenticacion>> Get()
         {
@@ -44,7 +44,7 @@ namespace WebApplication1.Controllers
             return await ConstruirToken(credencialesUsuario);
         }
 
-        [HttpPost("register")]
+        [HttpPost("register", Name = "registrarUsuario")]
         public async Task<ActionResult<RespuestaAutenticacion>> Registrar(CredencialesUsuario credencialesUsuario)
         {
             var usuario = new IdentityUser
@@ -63,7 +63,7 @@ namespace WebApplication1.Controllers
             }
         }
 
-        [HttpPost("login")]
+        [HttpPost("login", Name = "loginUsuario")]
         public async Task<ActionResult<RespuestaAutenticacion>> Login(CredencialesUsuario credencialesUsuario)
         {
             var resultado = await signInManager.PasswordSignInAsync(credencialesUsuario.Email, credencialesUsuario.Password,
@@ -106,7 +106,7 @@ namespace WebApplication1.Controllers
             };
         }
 
-        [HttpPost("HacerAdmin")]
+        [HttpPost("HacerAdmin", Name = "hacerAdmin")]
         public async Task<ActionResult> HacerAdmin(EditarAdminDTO editarAdminDTO)
         {
             var usuario = await userManager.FindByEmailAsync(editarAdminDTO.Email);
@@ -114,7 +114,7 @@ namespace WebApplication1.Controllers
             return NoContent();
         }
 
-        [HttpPost("RemoveAdmin")]
+        [HttpPost("RemoveAdmin", Name = "removerAdmin")]
         public async Task<ActionResult> RemoverAdmin(EditarAdminDTO editarAdminDTO)
         {
             var usuario = await userManager.FindByEmailAsync(editarAdminDTO.Email);
